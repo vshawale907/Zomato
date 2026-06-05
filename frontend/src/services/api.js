@@ -9,7 +9,7 @@ const api = axios.create({
 
 // Initialize Mock Local Storage Database
 const initMockDB = () => {
-  if (!localStorage.getItem('mock_initialized')) {
+  if (localStorage.getItem('mock_initialized') !== 'v2') {
     const users = [
       { id: 1, email: 'customer@gmail.com', fullName: 'John Customer', password: 'password', role: 'CUSTOMER', phone: '9876543210', addresses: [
         { id: 1, street: 'Flat 402, Sea Breeze Apartments, Bandra West', city: 'Mumbai', state: 'Maharashtra', zipCode: '400050', isDefault: true },
@@ -123,13 +123,79 @@ const initMockDB = () => {
       { id: 4, restaurantId: 3, userId: 1, userFullName: 'John Customer', rating: 4.2, comment: "Healthy, clean, and delicious food. Perfect if you are on a calorie deficit.", createdAt: new Date().toISOString() }
     ];
 
+    const orders = [
+      {
+        id: 1001,
+        orderNumber: "ORD-9988221",
+        userId: 1,
+        buyerName: "John Customer",
+        userName: "John Customer",
+        restaurantId: 1,
+        restaurantName: "Pizza Suprema",
+        totalAmount: 530.0,
+        status: "DELIVERED",
+        deliveryAddress: "Flat 402, Sea Breeze Apartments, Bandra West, Mumbai",
+        paymentMethod: "CARD",
+        paymentStatus: "PAID",
+        orderItems: [
+          { id: 1, menuItemName: "Margherita Sourdough", quantity: 1, price: 350.0, subtotal: 350.0 },
+          { id: 2, menuItemName: "Double Cheese Garlic Bread", quantity: 1, price: 180.0, subtotal: 180.0 }
+        ],
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 1002,
+        orderNumber: "ORD-9988222",
+        userId: 1,
+        buyerName: "John Customer",
+        userName: "John Customer",
+        restaurantId: 2,
+        restaurantName: "The Royal Biryani",
+        totalAmount: 430.0,
+        status: "PREPARING",
+        deliveryAddress: "Flat 402, Sea Breeze Apartments, Bandra West, Mumbai",
+        paymentMethod: "CASH_ON_DELIVERY",
+        paymentStatus: "PENDING",
+        orderItems: [
+          { id: 3, menuItemName: "Hyderabadi Chicken Dum Biryani", quantity: 1, price: 290.0, subtotal: 290.0 },
+          { id: 4, menuItemName: "Shahi Tukda", quantity: 1, price: 140.0, subtotal: 140.0 }
+        ],
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 1003,
+        orderNumber: "ORD-9988223",
+        userId: 1,
+        buyerName: "John Customer",
+        userName: "John Customer",
+        restaurantId: 3,
+        restaurantName: "Bonsai Greens",
+        totalAmount: 400.0,
+        status: "OUT_FOR_DELIVERY",
+        deliveryAddress: "Flat 402, Sea Breeze Apartments, Bandra West, Mumbai",
+        paymentMethod: "UPI",
+        paymentStatus: "PAID",
+        orderItems: [
+          { id: 5, menuItemName: "Avocado Quinoa Salad bowl", quantity: 1, price: 240.0, subtotal: 240.0 },
+          { id: 6, menuItemName: "Detox Green Juice", quantity: 1, price: 160.0, subtotal: 160.0 }
+        ],
+        createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString()
+      }
+    ];
+
+    const favorites = [
+      { userId: 1, restaurantId: 1 },
+      { userId: 1, restaurantId: 2 },
+      { userId: 1, restaurantId: 3 }
+    ];
+
     localStorage.setItem('mock_users', JSON.stringify(users));
     localStorage.setItem('mock_restaurants', JSON.stringify(restaurants));
     localStorage.setItem('mock_reviews', JSON.stringify(reviews));
-    localStorage.setItem('mock_orders', JSON.stringify([]));
-    localStorage.setItem('mock_favorites', JSON.stringify([]));
+    localStorage.setItem('mock_orders', JSON.stringify(orders));
+    localStorage.setItem('mock_favorites', JSON.stringify(favorites));
     localStorage.setItem('mock_carts', JSON.stringify({}));
-    localStorage.setItem('mock_initialized', 'true');
+    localStorage.setItem('mock_initialized', 'v2');
   }
 };
 
