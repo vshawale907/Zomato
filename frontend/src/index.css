@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-zomato-50: #FFF5F6;
+  --color-zomato-100: #FED7DC;
+  --color-zomato-200: #FCA4AF;
+  --color-zomato-300: #F97081;
+  --color-zomato-400: #EF4F5F;
+  --color-zomato-500: #E23744;
+  --color-zomato-600: #C9202C;
+  --color-zomato-700: #9E121E;
+  --color-zomato-800: #750B13;
+  --color-zomato-900: #4F040A;
+
+  --color-darkCharcoal: #1C1C1C;
+  --color-softGray: #F8F8F8;
+  --color-mutedGray: #828282;
+  --color-borderGray: #E8E8E8;
+
+  --font-sans: 'Inter', 'Outfit', sans-serif;
+
+  --shadow-premium: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-darkCharcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: var(--color-softGray);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-zomato-300);
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-zomato-400);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Loading Skeleton Shimmer */
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
