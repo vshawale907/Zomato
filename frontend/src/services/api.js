@@ -411,6 +411,22 @@ const handleMockRequest = (config) => {
     });
   }
 
+  if (cleanPath.startsWith('/api/menu/restaurant/') && method === 'GET') {
+    const restId = parseInt(cleanPath.split('/').pop());
+    const rests = getRestaurants();
+    const rest = rests.find(r => r.id === restId);
+    if (!rest) return wrapError("Restaurant not found!", 404);
+    return wrapResponse(rest.menuItems || []);
+  }
+
+  if (cleanPath.startsWith('/api/favorites/check/') && method === 'GET') {
+    if (!currentUser) return wrapResponse(false);
+    const restId = parseInt(cleanPath.split('/').pop());
+    const favs = getFavorites();
+    const exists = favs.some(f => f.userId === currentUser.id && f.restaurantId === restId);
+    return wrapResponse(exists);
+  }
+
   if (cleanPath.startsWith('/api/restaurants/') && method === 'GET') {
     const id = parseInt(cleanPath.split('/').pop());
     const rests = getRestaurants();
@@ -447,7 +463,11 @@ const handleMockRequest = (config) => {
   // Reviews Routing
   if (cleanPath.startsWith('/api/reviews/restaurant/') && method === 'GET') {
     const restId = parseInt(cleanPath.split('/').pop());
-    const revs = getReviews().filter(r => r.restaurantId === restId);
+    const revs = getReviews().filter(r => r.restaurantId === restId).map(r => ({
+      ...r,
+      userName: r.userName || r.userFullName,
+      userFullName: r.userFullName || r.userName
+    }));
     return wrapResponse(revs);
   }
 
@@ -460,6 +480,7 @@ const handleMockRequest = (config) => {
       restaurantId: restId,
       userId: currentUser.id,
       userFullName: currentUser.fullName,
+      userName: currentUser.fullName,
       rating: body.rating,
       comment: body.comment,
       createdAt: new Date().toISOString()
