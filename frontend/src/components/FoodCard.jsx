@@ -86,9 +86,9 @@ const FoodCard = ({ item, onCartConflict }) => {
             </button>
           </div>
         ) : (
-          <button
+        <button
             onClick={handleAdd}
-            disabled={loading || !item.available}
+            disabled={loading}
             className="flex items-center gap-1 rounded-lg border-2 border-zomato-500 px-3 py-1 text-xs font-bold text-zomato-500 bg-white hover:bg-zomato-500 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {loading ? (
@@ -96,7 +96,7 @@ const FoodCard = ({ item, onCartConflict }) => {
             ) : (
               <Plus className="h-3.5 w-3.5" />
             )}
-            {item.available ? 'ADD' : 'Unavailable'}
+            ADD
           </button>
         )}
       </div>

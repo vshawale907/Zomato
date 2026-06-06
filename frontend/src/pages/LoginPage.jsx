@@ -44,15 +44,7 @@ const LoginPage = () => {
     }
   };
 
-  const fillDemo = (role) => {
-    const map = {
-      customer: { email: 'customer@gmail.com', password: 'password' },
-      owner: { email: 'owner@gmail.com', password: 'password' },
-      admin: { email: 'admin@gmail.com', password: 'password' },
-    };
-    setEmail(map[role].email);
-    setPassword(map[role].password);
-  };
+
 
   return (
     <div className="min-h-screen flex bg-white">
@@ -83,22 +75,7 @@ const LoginPage = () => {
           <h2 className="text-2xl font-extrabold text-darkCharcoal">Welcome back</h2>
           <p className="mt-1 text-sm text-mutedGray">Sign in to your account to continue</p>
 
-          {/* Demo Credentials */}
-          <div className="mt-5 rounded-xl bg-zomato-50 border border-zomato-100 p-3 space-y-2">
-            <p className="text-xs font-semibold text-zomato-700 uppercase tracking-wider">Quick Login Demo</p>
-            <div className="flex gap-2 flex-wrap">
-              {[['customer', 'Customer'], ['owner', 'Owner'], ['admin', 'Admin']].map(([role, label]) => (
-                <button
-                  key={role}
-                  type="button"
-                  onClick={() => fillDemo(role)}
-                  className="rounded-lg bg-white border border-zomato-200 px-3 py-1 text-xs font-medium text-zomato-600 hover:bg-zomato-500 hover:text-white hover:border-zomato-500 transition-colors"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
+
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>

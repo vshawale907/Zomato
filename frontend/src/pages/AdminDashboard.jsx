@@ -124,9 +124,9 @@ const AdminDashboard = () => {
                     </thead>
                     <tbody className="divide-y divide-borderGray">
                       {stats.topRestaurants.map((rest, idx) => (
-                        <tr key={rest.restaurantId} className="hover:bg-softGray transition-colors">
+                        <tr key={rest.id || idx} className="hover:bg-softGray transition-colors">
                           <td className="py-3 pr-4 font-bold text-mutedGray">{idx + 1}</td>
-                          <td className="py-3 pr-4 font-semibold text-darkCharcoal">{rest.restaurantName}</td>
+                          <td className="py-3 pr-4 font-semibold text-darkCharcoal">{rest.name || rest.restaurantName}</td>
                           <td className="py-3">
                             <span className="rounded-full bg-zomato-50 px-2.5 py-0.5 text-xs font-bold text-zomato-600">
                               {rest.orderCount} orders

@@ -9,7 +9,7 @@ const api = axios.create({
 
 // Initialize Mock Local Storage Database
 const initMockDB = () => {
-  if (localStorage.getItem('mock_initialized') !== 'v2') {
+  if (localStorage.getItem('mock_initialized') !== 'v3') {
     const users = [
       { id: 1, email: 'customer@gmail.com', fullName: 'John Customer', password: 'password', role: 'CUSTOMER', phone: '9876543210', addresses: [
         { id: 1, street: 'Flat 402, Sea Breeze Apartments, Bandra West', city: 'Mumbai', state: 'Maharashtra', zipCode: '400050', isDefault: true },
@@ -195,7 +195,7 @@ const initMockDB = () => {
     localStorage.setItem('mock_orders', JSON.stringify(orders));
     localStorage.setItem('mock_favorites', JSON.stringify(favorites));
     localStorage.setItem('mock_carts', JSON.stringify({}));
-    localStorage.setItem('mock_initialized', 'v2');
+    localStorage.setItem('mock_initialized', 'v3');
   }
 };
 
@@ -763,9 +763,19 @@ const handleMockRequest = (config) => {
       return wrapError("Access Denied", 403);
     }
     const rests = getRestaurants().filter(r => r.ownerId === currentUser.id);
-    const orders = getOrders().filter(o => rests.some(r => r.id === o.restaurantId));
-    orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    return wrapResponse(orders);
+    const allOrders = getOrders().filter(o => rests.some(r => r.id === o.restaurantId));
+    allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const params = new URLSearchParams(queryString || '');
+    const page = parseInt(params.get('page') || '0');
+    const size = parseInt(params.get('size') || '10');
+    const content = allOrders.slice(page * size, (page + 1) * size);
+    return wrapResponse({
+      content,
+      totalElements: allOrders.length,
+      totalPages: Math.ceil(allOrders.length / size),
+      number: page,
+      size
+    });
   }
 
   if (cleanPath.startsWith('/api/owner/orders/') && cleanPath.endsWith('/status') && method === 'PUT') {
@@ -774,17 +784,33 @@ const handleMockRequest = (config) => {
     }
     const parts = cleanPath.split('/');
     const orderId = parseInt(parts[parts.length - 2]);
+    const params = new URLSearchParams(queryString || '');
+    const status = params.get('status') || body.status;
     const orders = getOrders();
     const idx = orders.findIndex(o => o.id === orderId);
     if (idx !== -1) {
-      orders[idx].status = body.status;
-      if (body.status === 'DELIVERED') {
+      orders[idx].status = status;
+      if (status === 'DELIVERED') {
         orders[idx].paymentStatus = 'PAID';
       }
       saveOrders(orders);
-      return wrapResponse(orders[idx], `Order status updated to ${body.status}`);
+      return wrapResponse(orders[idx], `Order status updated to ${status}`);
     }
     return wrapError("Order not found", 404);
+  }
+
+  if (cleanPath === '/api/owner/restaurants' && method === 'GET') {
+    if (!currentUser || (currentUser.role !== 'RESTAURANT_OWNER' && currentUser.role !== 'ADMIN')) {
+      return wrapError("Access Denied", 403);
+    }
+    const rests = getRestaurants().filter(r => r.ownerId === currentUser.id);
+    return wrapResponse({
+      content: rests,
+      totalElements: rests.length,
+      totalPages: 1,
+      number: 0,
+      size: 20
+    });
   }
 
   if (cleanPath === '/api/owner/restaurants' && method === 'POST') {
@@ -880,14 +906,24 @@ const handleMockRequest = (config) => {
     if (!currentUser || currentUser.role !== 'ADMIN') {
       return wrapError("Access Denied", 403);
     }
-    const users = getUsers().map(u => ({
+    const allUsers = getUsers().map(u => ({
       id: u.id,
       email: u.email,
       fullName: u.fullName,
       role: u.role,
       phone: u.phone
     }));
-    return wrapResponse(users);
+    const params = new URLSearchParams(queryString || '');
+    const page = parseInt(params.get('page') || '0');
+    const size = parseInt(params.get('size') || '10');
+    const content = allUsers.slice(page * size, (page + 1) * size);
+    return wrapResponse({
+      content,
+      totalElements: allUsers.length,
+      totalPages: Math.ceil(allUsers.length / size),
+      number: page,
+      size
+    });
   }
 
   if (cleanPath.startsWith('/api/admin/users/') && cleanPath.endsWith('/role') && method === 'PUT') {
@@ -896,10 +932,12 @@ const handleMockRequest = (config) => {
     }
     const parts = cleanPath.split('/');
     const userId = parseInt(parts[parts.length - 2]);
+    const params = new URLSearchParams(queryString || '');
+    const role = params.get('role') || body.role;
     const users = getUsers();
     const idx = users.findIndex(u => u.id === userId);
     if (idx !== -1) {
-      users[idx].role = body.role;
+      users[idx].role = role;
       saveUsers(users);
       return wrapResponse(null, "User role updated successfully");
     }

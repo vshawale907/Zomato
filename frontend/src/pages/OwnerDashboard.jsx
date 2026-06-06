@@ -334,7 +334,7 @@ const OwnerDashboard = () => {
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <p className="font-bold text-darkCharcoal">Order #{order.id}</p>
-                      <p className="text-sm text-mutedGray">{order.userName}</p>
+                      <p className="text-sm text-mutedGray">{order.userName || order.buyerName}</p>
                       <p className="text-xs text-mutedGray mt-0.5">{new Date(order.createdAt).toLocaleString('en-IN')}</p>
                     </div>
                     <span className={`rounded-full px-3 py-1 text-xs font-bold ${
@@ -346,7 +346,7 @@ const OwnerDashboard = () => {
                     </span>
                   </div>
                   <div className="text-sm text-mutedGray mb-3">
-                    {order.orderItems.map((i) => `${i.itemName} × ${i.quantity}`).join(', ')}
+                    {order.orderItems.map((i) => `${i.menuItemName} × ${i.quantity}`).join(', ')}
                   </div>
                   <div className="flex items-center justify-between">
                     <p className="font-bold text-darkCharcoal">₹{order.totalAmount}</p>
