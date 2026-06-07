@@ -155,7 +155,41 @@ public class DataSeeder implements CommandLineRunner {
                 .owner(owner)
                 .build();
 
-        restaurantRepository.saveAll(List.of(r1, r2, r3, r4));
+        Restaurant r5 = Restaurant.builder()
+                .name("Dragon Wok")
+                .description("Authentic Schezwan and Cantonese flavors brought to your plate.")
+                .image("https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500")
+                .coverImage("https://images.unsplash.com/photo-1563245372-f21724e3856d?w=1200")
+                .address("Linking Road, Bandra")
+                .city("Mumbai")
+                .latitude(19.0600)
+                .longitude(72.8360)
+                .cuisineType("Chinese, Asian, Noodles")
+                .deliveryTime(30)
+                .minimumOrder(250.0)
+                .openingTime("12:00 PM")
+                .closingTime("11:00 PM")
+                .owner(owner)
+                .build();
+
+        Restaurant r6 = Restaurant.builder()
+                .name("Sweet Cravings Bakery")
+                .description("Freshly baked cakes, pastries, macarons, and artisanal coffees.")
+                .image("https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500")
+                .coverImage("https://images.unsplash.com/photo-1551024601-bec78aea704b?w=1200")
+                .address("Carter Road, Bandra West")
+                .city("Mumbai")
+                .latitude(19.0650)
+                .longitude(72.8250)
+                .cuisineType("Desserts, Bakery, Beverages")
+                .deliveryTime(20)
+                .minimumOrder(150.0)
+                .openingTime("09:00 AM")
+                .closingTime("10:00 PM")
+                .owner(owner)
+                .build();
+
+        restaurantRepository.saveAll(List.of(r1, r2, r3, r4, r5, r6));
 
         // 4. Create Menu Items for Pizza Suprema
         MenuItem m1 = MenuItem.builder()
@@ -261,7 +295,49 @@ public class DataSeeder implements CommandLineRunner {
                 .restaurant(r4)
                 .build();
 
-        menuItemRepository.saveAll(List.of(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10));
+        // Menu items for Dragon Wok
+        MenuItem m11 = MenuItem.builder()
+                .name("Hakka Noodles")
+                .description("Stir-fried noodles tossed with fresh veggies and soy sauce.")
+                .price(180.0)
+                .category("Main Course")
+                .image("https://images.unsplash.com/photo-1585032226651-759b368d7246?w=300")
+                .veg(true)
+                .restaurant(r5)
+                .build();
+
+        MenuItem m12 = MenuItem.builder()
+                .name("Chilli Chicken Dry")
+                .description("Crispy fried chicken bites tossed in spicy soy-garlic sauce.")
+                .price(250.0)
+                .category("Starters")
+                .image("https://images.unsplash.com/photo-1525755662778-989d0524087e?w=300")
+                .veg(false)
+                .restaurant(r5)
+                .build();
+
+        // Menu items for Sweet Cravings Bakery
+        MenuItem m13 = MenuItem.builder()
+                .name("Chocolate Truffle Cake (1kg)")
+                .description("Rich and gooey chocolate cake made with premium dark cocoa.")
+                .price(850.0)
+                .category("Desserts")
+                .image("https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300")
+                .veg(true)
+                .restaurant(r6)
+                .build();
+
+        MenuItem m14 = MenuItem.builder()
+                .name("Blueberry Cheesecake Slice")
+                .description("Classic New York style cheesecake topped with blueberry compote.")
+                .price(220.0)
+                .category("Desserts")
+                .image("https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=300")
+                .veg(true)
+                .restaurant(r6)
+                .build();
+
+        menuItemRepository.saveAll(List.of(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14));
 
         // 5. Create Sample Reviews to calculate default ratings
         Review rev1 = Review.builder()
@@ -303,7 +379,11 @@ public class DataSeeder implements CommandLineRunner {
         r3.setNumRatings(1);
         r4.setRating(0.0);
         r4.setNumRatings(0);
+        r5.setRating(0.0);
+        r5.setNumRatings(0);
+        r6.setRating(0.0);
+        r6.setNumRatings(0);
 
-        restaurantRepository.saveAll(List.of(r1, r2, r3, r4));
+        restaurantRepository.saveAll(List.of(r1, r2, r3, r4, r5, r6));
     }
 }
